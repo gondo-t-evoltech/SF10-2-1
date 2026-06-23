@@ -21,7 +21,7 @@ public interface ToDoMapper {
 	/**
 	 * 指定されたIDに対応する「すること」を取得します。
 	 */
-	ToDo selectByID(@Param("id") Integer id);
+	ToDo selectById(@Param("id") Integer id);
 	
 	/**
 	 * 「すること」を登録します。
