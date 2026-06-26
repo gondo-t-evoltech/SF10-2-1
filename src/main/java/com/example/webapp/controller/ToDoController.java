@@ -2,6 +2,8 @@ package com.example.webapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,8 +73,16 @@ public class ToDoController {
 	 * 新規登録を実行します。
 	 */
 	@PostMapping("/save")
-	public String create(ToDoForm form,
+	public String create(@Validated ToDoForm form,
+		BindingResult bindingResult,
 		RedirectAttributes attributes) {
+		// === バリデーションチェック ===
+		// 入力チェックNG：入力画面を表示する
+		if (bindingResult.hasErrors()) {
+			// 新規登録画面の設定
+			form.setIsNew(true);
+			return "todo/form";
+		}
 		// エンティティへの変換
 		ToDo ToDo = ToDoHelper.convertToDo(form);
 		// 登録実行
@@ -109,8 +119,16 @@ public class ToDoController {
 	 * 「すること」の情報を更新します。
 	 */
 	@PostMapping("/update")
-	public String update(ToDoForm form,
+	public String update(@Validated ToDoForm form,
+		BindingResult bindingResult,
 		RedirectAttributes attributes) {
+		// === バリデーションチェック ===
+		// 入力チェックNG：入力画面を表示する
+		if (bindingResult.hasErrors()) {
+			// 更新画面の設定
+			form.setIsNew(false);
+			return "todo/form";
+		}
 		// エンティティへの変換
 		ToDo ToDo = ToDoHelper.convertToDo(form);
 		// 更新処理
